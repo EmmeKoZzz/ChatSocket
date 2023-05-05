@@ -15,13 +15,13 @@ export default function ({ state }: Props) {
 		eventRouter(JSON.parse(data));
 	}
 
-	const ws = useWebSocket(state.url, { onMessage });
+	const { sendJsonMessage: send } = useWebSocket(state.url, { onMessage });
 
 	return (
 		<div className="w-full flex h-full justify-center items-center">
-			<div className="w-4/5 h-4/5 flex flex-col justify-end py-6 container">
-				{/* <ChatBox name={state.room} messages={messages} />
-				<ChatInput send={setMessages} /> */}
+			<div className="w-4/5 h-full flex flex-col justify-end pb-16 pt-4 container max-w-lg">
+				<ChatBox name={state.room} messages={messages} />
+				<ChatInput updateChat={setMessages} send={send} />
 			</div>
 		</div>
 	);
