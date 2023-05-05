@@ -2,10 +2,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Input, Typography } from '@material-tailwind/react';
-import { useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 import { InferType, object, string } from 'yup';
+import { RoomState } from '../../models';
 
 const validationSchema = object().shape({
 	room: string().required(),
@@ -13,24 +13,24 @@ const validationSchema = object().shape({
 });
 type Fields = InferType<typeof validationSchema>;
 
+type Props = {
+	liftSocketUrl: Dispatch<SetStateAction<string>>;
+	init: Dispatch<SetStateAction<RoomState>>;
+};
+
 // eslint-disable-next-line func-names
-export default function () {
-	const [socketUrl, setSocketUrl] = useState('');
+export default function ({ liftSocketUrl, init }: Props) {
 	const form = useForm<Fields>({
 		resolver: yupResolver(validationSchema),
 	});
 
-	const { readyState } = useWebSocket(socketUrl, {
-		onOpen(event) {
-			console.log(event);
+	const onSubmit = useCallback(
+		(data: Fields) => {
+			liftSocketUrl(`ws://localhost:8000/chat/${data.room}`);
+			init({ ...data, initChat: true });
 		},
-	});
-
-	console.log(readyState);
-
-	const onSubmit = useCallback((data: Fields) => {
-		setSocketUrl(`ws://localhost:8000/`);
-	}, []);
+		[init, liftSocketUrl]
+	);
 
 	return (
 		<div className="w-full h-full flex justify-center items-center">
