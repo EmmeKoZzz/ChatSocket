@@ -14,22 +14,24 @@ const validationSchema = object().shape({
 type Fields = InferType<typeof validationSchema>;
 
 type Props = {
-	liftSocketUrl: Dispatch<SetStateAction<string>>;
 	init: Dispatch<SetStateAction<RoomState>>;
 };
 
 // eslint-disable-next-line func-names
-export default function ({ liftSocketUrl, init }: Props) {
+export default function ({ init }: Props) {
 	const form = useForm<Fields>({
 		resolver: yupResolver(validationSchema),
 	});
 
 	const onSubmit = useCallback(
 		(data: Fields) => {
-			liftSocketUrl(`ws://localhost:8000/chat/${data.room}`);
-			init({ ...data, initChat: true });
+			init({
+				...data,
+				initChat: true,
+				url: `ws://localhost:8000/chat/${data.room}`,
+			});
 		},
-		[init, liftSocketUrl]
+		[init]
 	);
 
 	return (
