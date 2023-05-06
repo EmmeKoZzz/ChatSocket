@@ -1,31 +1,27 @@
 import { IconButton, Input } from '@material-tailwind/react';
-import classNames from 'classnames';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { SendJsonMessage } from 'react-use-websocket/dist/lib/types';
-import { ChatMessage, RComponent } from '../../../models';
+import { ChatMessage } from '../../../models';
 import { messageIcon } from '../assets';
 
 type Props = {
+	user: string;
 	send: SendJsonMessage;
-	updateChat: Dispatch<SetStateAction<ChatMessage[]>>;
 };
 
 /* eslint-disable func-names */
-export default function ({ updateChat, send }: Props) {
+export default function ({ send, user }: Props) {
 	const [message, setMessage] = useState('');
 
 	const sendMessage = () => {
-		updateChat((chat) => [...chat, { self: true, own: 'me', message }]);
+		send({
+			type: 'chatMessage',
+			payload: { message, user },
+		});
 
 		const input = document.querySelector('#ChatInput') as HTMLInputElement;
 		input.value = '';
-
 		setMessage('');
-
-		send({
-			type: 'chatMessage',
-			payload: message,
-		});
 	};
 
 	return (

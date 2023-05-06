@@ -11,6 +11,7 @@ export default function ({ info }: Props) {
 	const { self, own, message } = info;
 
 	const align = useMemo(() => (self ? 'justify-end' : 'justify-start'), [self]);
+
 	const borderColor = useMemo(
 		() => (self ? 'border-blue-300' : 'border-amber-900'),
 		[self]
@@ -19,11 +20,13 @@ export default function ({ info }: Props) {
 
 	return (
 		<div className={`p-2 flex ${align}`}>
-			<div className={`border w-fit py-2 px-4 rounded-lg ${borderColor}`}>
+			<div
+				className={`border w-fit py-2 px-4 rounded-lg max-w-xs ${borderColor}`}
+			>
 				<Typography variant="h6" className="text-xs" color={ownColor}>
 					{`${own}:`}
 				</Typography>
-				<Typography>{message}</Typography>
+				<Typography className="h-fit">{message}</Typography>
 			</div>
 		</div>
 	);

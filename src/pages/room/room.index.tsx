@@ -4,7 +4,7 @@ import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 import { RoomState } from '../../models';
 import { ChatMessage } from '../../models/message.model';
 import { ChatBox, ChatInput } from './componets';
-import { eventRouter } from './websocket';
+import { chatEventRouter } from './websocket';
 
 type Props = { state: RoomState };
 
@@ -12,7 +12,7 @@ export default function ({ state }: Props) {
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 
 	function onMessage({ data }: MessageEvent) {
-		eventRouter(JSON.parse(data));
+		chatEventRouter(JSON.parse(data), setMessages, state.username);
 	}
 
 	const { sendJsonMessage: send } = useWebSocket(state.url, { onMessage });
@@ -20,8 +20,8 @@ export default function ({ state }: Props) {
 	return (
 		<div className="w-full flex h-full justify-center items-center">
 			<div className="w-4/5 h-full flex flex-col justify-end pb-16 pt-4 container max-w-lg">
-				<ChatBox name={state.room} messages={messages} />
-				<ChatInput updateChat={setMessages} send={send} />
+				<ChatBox messages={messages} />
+				<ChatInput send={send} user={state.username} />
 			</div>
 		</div>
 	);

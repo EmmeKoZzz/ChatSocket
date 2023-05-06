@@ -1,4 +1,4 @@
 export interface WebSocketEvent {
 	type: string;
-	payload: string;
+	payload: object;
 }

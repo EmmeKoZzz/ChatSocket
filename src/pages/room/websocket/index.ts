@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/prefer-default-export
-export { default as eventRouter } from './event-router';
+export { default as chatEventRouter } from './event-router';

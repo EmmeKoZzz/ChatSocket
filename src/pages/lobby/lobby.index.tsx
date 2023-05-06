@@ -51,7 +51,7 @@ export default function ({ init }: Props) {
 				<Input
 					label="username"
 					{...form.register('username')}
-					color={form.formState.errors.room && 'red'}
+					color={form.formState.errors.username && 'red'}
 				/>
 				<Button
 					color="light-blue"
